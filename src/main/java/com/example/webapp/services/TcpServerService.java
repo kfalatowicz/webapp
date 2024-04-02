@@ -71,7 +71,7 @@ public class TcpServerService {
         }
     }
 
-    public void sendMessageToDevice(Integer deviceId, String message) {
+    public void sendMessageToDevice(Integer deviceId, String message, boolean log) {
         Socket socket = inMemDataService.getConnections().get(deviceId).getSocket();
         if (socket != null) {
             try {
@@ -79,7 +79,7 @@ public class TcpServerService {
                 byte[] frame = createFrame(deviceId, message);
                 out.write(frame);
                 out.flush();
-                System.out.println("Message sent to device " + deviceId + ": " + message);
+                if (log) System.out.println("Message sent to device " + deviceId + ": " + message);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -91,7 +91,7 @@ public class TcpServerService {
     @Scheduled(fixedRate = 100)
     public void sendResetMessageToDevices() {
         inMemDataService.getConnections().forEach((deviceId, device) -> {
-            sendMessageToDevice(deviceId, "RESET");
+            sendMessageToDevice(deviceId, "RESET", false);
         });
     }
 

@@ -40,7 +40,7 @@ public class DeviceController {
     public ResponseEntity<?> setSendFreq(@PathVariable String id, @RequestParam Integer freq) {
         Device device = inMemDataService.getConnections().get(Integer.valueOf(id));
         if (device != null) {
-            tcpServerService.sendMessageToDevice(device.getCanId(), "F " + freq);
+            tcpServerService.sendMessageToDevice(device.getCanId(), "F " + freq, true);
             return new ResponseEntity<>(device, HttpStatus.OK);
         } else{
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
